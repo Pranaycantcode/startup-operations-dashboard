@@ -1,6 +1,6 @@
 import { Task } from "@/types/task";
 
-export const tasks: Task[] = [
+export const mockTasks: Task[] = [
   {
     id: 1,
     title: "Merchant onboarding flow",
@@ -26,3 +26,4 @@ export const tasks: Task[] = [
     deadline: "2026-06-20",
   },
 ];
+console.log("mockData loaded:", mockTasks); 

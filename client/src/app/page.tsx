@@ -1,6 +1,7 @@
 import MainLayout from "@/components/layout/dashboardLayout";
 import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
+import { mockTasks } from "../data/mockData";
 
 export default function Home() {
   return (
@@ -11,7 +12,7 @@ export default function Home() {
         <StatsCard title="Completed Sprints" value="12" />
       </div>
 
-      <TaskTable />
+      <TaskTable tasks={mockTasks} />
     </MainLayout>
   );
 }

@@ -1,32 +1,65 @@
-import { tasks } from "@/data/mockData";
+import { Task } from "@/types/task";
 import StatusBadge from "@/components/ui/statusBadge";
 import PriorityBadge from "@/components/ui/priorityBadge";
+import { mockTasks } from "@/data/mockData";
 
-const TaskTable = () => {
+interface TaskTableProps {
+  tasks: Task[];
+}
+
+const TaskTable = ({ tasks = [] }: TaskTableProps) => {
+  console.log("tasks received:", tasks); 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-xl font-semibold">Active Tasks</h2>
+    <div className="overflow-hidden rounded-2xl bg-white shadow">
+      <table className="min-w-full">
+        <thead className="border-b bg-gray-50">
+          <tr>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+              Task
+            </th>
 
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b text-left text-sm text-gray-500">
-            <th className="pb-3">Task</th>
-            <th className="pb-3">Owner</th>
-            <th className="pb-3">Priority</th>
-            <th className="pb-3">Status</th>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+              Assignee
+            </th>
+
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+              Status
+            </th>
+
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+              Priority
+            </th>
+
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+              Due Date
+            </th>
           </tr>
         </thead>
 
         <tbody>
           {tasks.map((task) => (
-            <tr key={task.id} className="border-b text-sm">
-              <td className="py-4">{task.title}</td>
-              <td>{task.owner}</td>
-              <td>
+            <tr
+              key={task.id}
+              className="border-b transition hover:bg-gray-50"
+            >
+              <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                {task.title}
+              </td>
+
+              <td className="px-6 py-4 text-sm text-gray-600">
+                {task.owner}
+              </td>
+
+              <td className="px-6 py-4">
+                <StatusBadge status={task.status} />
+              </td>
+
+              <td className="px-6 py-4">
                 <PriorityBadge priority={task.priority} />
               </td>
-              <td>
-                <StatusBadge status={task.status} />
+
+              <td className="px-6 py-4 text-sm text-gray-600">
+                {task.deadline}
               </td>
             </tr>
           ))}
