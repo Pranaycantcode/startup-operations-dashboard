@@ -1,21 +1,41 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import MainLayout from "@/components/layout/dashboardLayout";
 import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
 import DashboardControls from "@/components/dashboard/dashboardControls";
 
-import { mockTasks } from "../data/mockData";
+import { Task } from "@/types/task";
+import { fetchTasks } from "@/services/taskService";
 
 export default function Home() {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
 
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        setIsLoading(true);
+        const data = await fetchTasks();
+        setTasks(data);
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTasks();
+  }, []);
+
   const filteredTasks = useMemo(() => {
-    return mockTasks.filter((task) => {
+    return tasks.filter((task) => {
       const matchesSearch = task.title
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -28,16 +48,16 @@ export default function Home() {
 
       return matchesSearch && matchesPriority && matchesStatus;
     });
-  }, [searchTerm, selectedPriority, selectedStatus]);
+  }, [tasks, searchTerm, selectedPriority, selectedStatus]);
 
   return (
     <MainLayout>
       <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
-        <StatsCard title="Total Tasks" value={String(mockTasks.length)} />
+        <StatsCard title="Total Tasks" value={String(tasks.length)} />
         <StatsCard title="Visible Tasks" value={String(filteredTasks.length)} />
         <StatsCard
           title="Completed"
-          value={String(mockTasks.filter((task) => task.status === "Completed").length)}
+          value={String(tasks.filter((task) => task.status === "Completed").length)}
         />
       </div>
 
@@ -50,7 +70,13 @@ export default function Home() {
         setSelectedStatus={setSelectedStatus}
       />
 
-      <TaskTable tasks={filteredTasks} />
+      {isLoading ? (
+        <div className="rounded-2xl bg-white p-6 text-gray-500 shadow-sm">
+          Loading tasks...
+        </div>
+      ) : (
+        <TaskTable tasks={filteredTasks} />
+      )}
     </MainLayout>
   );
 }

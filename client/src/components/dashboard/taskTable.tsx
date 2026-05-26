@@ -47,7 +47,7 @@ const TaskTable = ({ tasks = [] }: TaskTableProps) => {
               </td>
 
               <td className="px-6 py-4 text-sm text-gray-600">
-                {task.owner}
+                {task.assignee}
               </td>
 
               <td className="px-6 py-4">
@@ -59,7 +59,7 @@ const TaskTable = ({ tasks = [] }: TaskTableProps) => {
               </td>
 
               <td className="px-6 py-4 text-sm text-gray-600">
-                {task.deadline}
+                {task.dueDate}
               </td>
             </tr>
           ))}

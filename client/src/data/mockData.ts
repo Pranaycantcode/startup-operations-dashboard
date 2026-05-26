@@ -4,26 +4,26 @@ export const mockTasks: Task[] = [
   {
     id: 1,
     title: "Merchant onboarding flow",
-    owner: "Pranay",
+    assignee: "Pranay",
     priority: "High",
     status: "In Progress",
-    deadline: "2026-06-12",
+    dueDate: "2026-06-12",
   },
   {
     id: 2,
     title: "Campaign analytics panel",
-    owner: "Rahul",
+    assignee: "Rahul",
     priority: "Medium",
     status: "Review",
-    deadline: "2026-06-18",
+    dueDate: "2026-06-18",
   },
   {
     id: 3,
     title: "CRM migration",
-    owner: "Ananya",
+    assignee: "Ananya",
     priority: "High",
     status: "Completed",
-    deadline: "2026-06-20",
+    dueDate: "2026-06-20",
   },
 ];
 console.log("mockData loaded:", mockTasks); 
