@@ -6,9 +6,10 @@ import MainLayout from "@/components/layout/dashboardLayout";
 import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
 import DashboardControls from "@/components/dashboard/dashboardControls";
+import AddTaskForm from "@/components/dashboard/addTaskForm";
+import { createTask, fetchTasks, CreateTaskInput } from "@/services/taskService";
 
 import { Task } from "@/types/task";
-import { fetchTasks } from "@/services/taskService";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -50,6 +51,16 @@ export default function Home() {
     });
   }, [tasks, searchTerm, selectedPriority, selectedStatus]);
 
+  const handleAddTask = async (taskData: CreateTaskInput) => {
+  try {
+    const newTask = await createTask(taskData);
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+  } catch (error) {
+    console.error("Failed to add task:", error);
+  }
+};
+
   return (
     <MainLayout>
       <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -60,6 +71,8 @@ export default function Home() {
           value={String(tasks.filter((task) => task.status === "Completed").length)}
         />
       </div>
+
+      <AddTaskForm onAddTask={handleAddTask} />
 
       <DashboardControls
         searchTerm={searchTerm}
