@@ -11,6 +11,7 @@ import {
   createTask,
   fetchTasks,
   updateTaskStatus,
+  deleteTask,
   CreateTaskInput,
 } from "@/services/taskService";
 import { Task } from "@/types/task";
@@ -77,6 +78,16 @@ export default function Home() {
     }
   };
 
+  const handleDeleteTask = async (taskId: number) => {
+    try {
+      await deleteTask(taskId);
+
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+  };
+
   return (
     <MainLayout>
       <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -106,7 +117,11 @@ export default function Home() {
           Loading tasks...
         </div>
       ) : (
-        <TaskTable tasks={filteredTasks} onUpdateStatus={handleUpdateStatus} />
+        <TaskTable
+          tasks={filteredTasks}
+          onUpdateStatus={handleUpdateStatus}
+          onDeleteTask={handleDeleteTask}
+        />
       )}
     </MainLayout>
   );

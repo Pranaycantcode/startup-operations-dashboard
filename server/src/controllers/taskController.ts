@@ -100,3 +100,23 @@ export const updateTaskStatus = (
     data: task,
   });
 };
+
+export const deleteTask = (req: Request, res: Response) => {
+  const taskId = Number(req.params.id);
+
+  const taskIndex = tasks.findIndex((task) => task.id === taskId);
+
+  if (taskIndex === -1) {
+    return res.status(404).json({
+      success: false,
+      message: "Task not found",
+    });
+  }
+
+  const deletedTask = tasks.splice(taskIndex, 1)[0];
+
+  res.status(200).json({
+    success: true,
+    data: deletedTask,
+  });
+};

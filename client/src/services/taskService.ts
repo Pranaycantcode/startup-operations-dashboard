@@ -57,3 +57,17 @@ export const updateTaskStatus = async (
 
   return result.data;
 };
+
+export const deleteTask = async (taskId: number): Promise<Task> => {
+  const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete task");
+  }
+
+  const result = await response.json();
+
+  return result.data;
+};
