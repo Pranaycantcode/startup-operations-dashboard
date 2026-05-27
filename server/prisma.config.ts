@@ -3,8 +3,10 @@ import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
+  migrations: {
+    path: "prisma/migrations",
+  },
   datasource: {
-    // This tells Prisma Migrate where your SQLite database is
-    url: env("DATABASE_URL"), 
+    url: env("DATABASE_URL"),
   },
 });
