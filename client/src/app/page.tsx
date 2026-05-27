@@ -6,6 +6,7 @@ import MainLayout from "@/components/layout/dashboardLayout";
 import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
 import DashboardControls from "@/components/dashboard/dashboardControls";
+import AnalyticsSection from "@/components/dashboard/analyticsSection";
 import AddTaskForm from "@/components/dashboard/addTaskForm";
 import {
   createTask,
@@ -90,7 +91,7 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+      {/* <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
         <StatsCard title="Total Tasks" value={String(tasks.length)} />
         <StatsCard title="Visible Tasks" value={String(filteredTasks.length)} />
         <StatsCard
@@ -100,6 +101,8 @@ export default function Home() {
           )}
         />
       </div>
+ */}
+      <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
 
       <AddTaskForm onAddTask={handleAddTask} />
 
