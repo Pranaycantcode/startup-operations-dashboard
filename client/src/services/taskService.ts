@@ -10,6 +10,7 @@ export const fetchTasks = async (): Promise<Task[]> => {
   }
 
   const result = await response.json();
+
   return result.data;
 };
 
@@ -29,5 +30,30 @@ export const createTask = async (
   }
 
   const result = await response.json();
+
+  return result.data;
+};
+
+export const updateTaskStatus = async (
+  taskId: number,
+  status: Task["status"]
+): Promise<Task> => {
+  const response = await fetch(
+    `http://localhost:5000/api/tasks/${taskId}/status`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update task status");
+  }
+
+  const result = await response.json();
+
   return result.data;
 };

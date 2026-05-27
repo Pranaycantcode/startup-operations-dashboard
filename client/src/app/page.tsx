@@ -7,8 +7,12 @@ import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
 import DashboardControls from "@/components/dashboard/dashboardControls";
 import AddTaskForm from "@/components/dashboard/addTaskForm";
-import { createTask, fetchTasks, CreateTaskInput } from "@/services/taskService";
-
+import {
+  createTask,
+  fetchTasks,
+  updateTaskStatus,
+  CreateTaskInput,
+} from "@/services/taskService";
 import { Task } from "@/types/task";
 
 export default function Home() {
@@ -52,14 +56,26 @@ export default function Home() {
   }, [tasks, searchTerm, selectedPriority, selectedStatus]);
 
   const handleAddTask = async (taskData: CreateTaskInput) => {
-  try {
-    const newTask = await createTask(taskData);
+    try {
+      const newTask = await createTask(taskData);
 
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-  } catch (error) {
-    console.error("Failed to add task:", error);
-  }
-};
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+    } catch (error) {
+      console.error("Failed to add task:", error);
+    }
+  };
+
+  const handleUpdateStatus = async (taskId: number, status: Task["status"]) => {
+    try {
+      const updatedTask = await updateTaskStatus(taskId, status);
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? updatedTask : task)),
+      );
+    } catch (error) {
+      console.error("Failed to update task status:", error);
+    }
+  };
 
   return (
     <MainLayout>
@@ -68,7 +84,9 @@ export default function Home() {
         <StatsCard title="Visible Tasks" value={String(filteredTasks.length)} />
         <StatsCard
           title="Completed"
-          value={String(tasks.filter((task) => task.status === "Completed").length)}
+          value={String(
+            tasks.filter((task) => task.status === "Completed").length,
+          )}
         />
       </div>
 
@@ -88,7 +106,7 @@ export default function Home() {
           Loading tasks...
         </div>
       ) : (
-        <TaskTable tasks={filteredTasks} />
+        <TaskTable tasks={filteredTasks} onUpdateStatus={handleUpdateStatus} />
       )}
     </MainLayout>
   );

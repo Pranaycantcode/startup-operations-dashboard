@@ -61,3 +61,42 @@ export const createTask = (req: Request, res: Response) => {
     data: newTask,
   });
 };
+
+export const updateTaskStatus = (
+  req: Request,
+  res: Response
+) => {
+  const taskId = Number(req.params.id);
+
+  const { status } = req.body;
+
+  const validStatuses = [
+    "Pending",
+    "In Progress",
+    "Review",
+    "Completed",
+  ];
+
+  if (!validStatuses.includes(status)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid status value",
+    });
+  }
+
+  const task = tasks.find((task) => task.id === taskId);
+
+  if (!task) {
+    return res.status(404).json({
+      success: false,
+      message: "Task not found",
+    });
+  }
+
+  task.status = status;
+
+  res.status(200).json({
+    success: true,
+    data: task,
+  });
+};
