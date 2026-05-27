@@ -1,27 +1,30 @@
 "use client";
 
-const Header = () => {
+import { Menu } from "lucide-react";
+
+interface HeaderProps {
+  onOpenSidebar: () => void;
+}
+
+const Header = ({ onOpenSidebar }: HeaderProps) => {
   return (
-    <header className="flex items-center justify-between border-b bg-white px-8 py-4">
+    <header className="flex items-center justify-between border-b border-gray-200 bg-white px-5 py-4 md:px-8">
       <div>
-        <h1 className="text-2xl font-bold text-black">
+        <h1 className="text-xl font-bold text-gray-900 md:text-2xl">
           Operations Dashboard
         </h1>
 
         <p className="text-sm text-gray-500">
-          Monitor operational workflows and sprint execution
+          Monitor workflows, tasks, and execution health
         </p>
       </div>
 
-      <div className="flex items-center gap-4">
-        <input
-          type="text"
-          placeholder="Search tasks..."
-          className="rounded-xl border border-gray-300 px-4 py-2 outline-none focus:border-black"
-        />
-
-        <div className="h-10 w-10 rounded-full bg-gray-300" />
-      </div>
+      <button
+        onClick={onOpenSidebar}
+        className="rounded-xl border border-gray-200 p-2 md:hidden"
+      >
+        <Menu size={20} />
+      </button>
     </header>
   );
 };

@@ -1,27 +1,33 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import Sidebar from "./sidebar";
 import Header from "./header";
+import MobileSidebar from "./mobileSidebar";
 
-interface MainLayoutProps {
+interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const DashboardLayout = ({ children }: DashboardLayoutProps) => {
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
-      <div className="flex flex-1 flex-col">
-        <Header />
+      <MobileSidebar
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
+      />
 
-        <main className="flex-1 p-8">
-          {children}
-        </main>
+      <div className="flex flex-1 flex-col">
+        <Header onOpenSidebar={() => setIsMobileSidebarOpen(true)} />
+
+        <main className="flex-1 p-5 md:p-8">{children}</main>
       </div>
     </div>
   );
 };
 
-export default MainLayout;
+export default DashboardLayout;
