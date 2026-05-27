@@ -71,3 +71,26 @@ export const deleteTask = async (taskId: number): Promise<Task> => {
 
   return result.data;
 };
+
+export type UpdateTaskInput = Omit<Task, "id">;
+
+export const updateTask = async (
+  taskId: number,
+  taskData: UpdateTaskInput
+): Promise<Task> => {
+  const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(taskData),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update task");
+  }
+
+  const result = await response.json();
+
+  return result.data;
+};

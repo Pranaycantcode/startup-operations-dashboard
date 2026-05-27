@@ -1,18 +1,27 @@
 import { Task } from "@/types/task";
 import PriorityBadge from "@/components/ui/priorityBadge";
 import TaskStatusSelect from "@/components/dashboard/taskStatusSelect";
+import { formatDate } from "@/lib/formatDate";
 
 interface TaskTableProps {
   tasks: Task[];
   onUpdateStatus: (taskId: number, status: Task["status"]) => void;
   onDeleteTask: (taskId: number) => void;
+  onEditTask: (task: Task) => void;
 }
 
-const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
+const TaskTable = ({
+  tasks,
+  onUpdateStatus,
+  onDeleteTask,
+  onEditTask,
+}: TaskTableProps) => {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
       <div className="border-b border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Active Tasks</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Active Tasks
+        </h2>
       </div>
 
       <table className="w-full border-collapse">
@@ -37,7 +46,9 @@ const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
                 {task.title}
               </td>
 
-              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{task.assignee}</td>
+              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
+                {task.assignee}
+              </td>
 
               <td className="px-6 py-4">
                 <PriorityBadge priority={task.priority} />
@@ -50,15 +61,26 @@ const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
                 />
               </td>
 
-              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{task.dueDate}</td>
+              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
+                {formatDate(task.dueDate)}
+              </td>
 
               <td className="px-6 py-4">
-                <button
-                  onClick={() => onDeleteTask(task.id)}
-                  className="rounded-lg border border-red-200 px-3 py-1 text-sm font-medium text-red-600 transition hover:bg-red-50"
-                >
-                  Delete
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onEditTask(task)}
+                    className="rounded-lg border border-gray-300 px-3 py-1 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => onDeleteTask(task.id)}
+                    className="rounded-lg border border-red-200 px-3 py-1 text-sm font-medium text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/40"
+                  >
+                    Delete
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

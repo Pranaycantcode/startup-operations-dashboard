@@ -1,21 +1,22 @@
-
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 
 import MainLayout from "@/components/layout/dashboardLayout";
-import StatsCard from "@/components/dashboard/statsCard";
+//import StatsCard from "@/components/dashboard/statsCard";
 import TaskTable from "@/components/dashboard/taskTable";
 import DashboardControls from "@/components/dashboard/dashboardControls";
 import AnalyticsSection from "@/components/dashboard/analyticsSection";
 import AddTaskForm from "@/components/dashboard/addTaskForm";
+import EditTaskModal from "@/components/dashboard/editTaskModal";
 import {
   createTask,
   fetchTasks,
+  updateTask,
   updateTaskStatus,
   deleteTask,
   CreateTaskInput,
+  UpdateTaskInput,
 } from "@/services/taskService";
 import { Task } from "@/types/task";
 
@@ -26,6 +27,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -91,6 +93,23 @@ export default function Home() {
     }
   };
 
+  const handleUpdateTask = async (
+    taskId: number,
+    taskData: UpdateTaskInput,
+  ) => {
+    try {
+      const updatedTask = await updateTask(taskId, taskData);
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task.id === taskId ? updatedTask : task)),
+      );
+
+      setSelectedTask(null);
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    }
+  };
+
   return (
     <MainLayout>
       {/* <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -126,6 +145,15 @@ export default function Home() {
           tasks={filteredTasks}
           onUpdateStatus={handleUpdateStatus}
           onDeleteTask={handleDeleteTask}
+          onEditTask={setSelectedTask}
+        />
+      )}
+
+      {selectedTask && (
+        <EditTaskModal
+          task={selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onUpdateTask={handleUpdateTask}
         />
       )}
     </MainLayout>

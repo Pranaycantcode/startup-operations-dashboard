@@ -161,3 +161,63 @@ export const deleteTask = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updateTask = async (req: Request, res: Response) => {
+  try {
+    const taskId = Number(req.params.id);
+    const { title, assignee, status, priority, dueDate } = req.body;
+
+    if (!title || !assignee || !status || !priority || !dueDate) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value",
+      });
+    }
+
+    if (!validPriorities.includes(priority)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid priority value",
+      });
+    }
+
+    const existingTask = await prisma.task.findUnique({
+      where: { id: taskId },
+    });
+
+    if (!existingTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: taskId },
+      data: {
+        title,
+        assignee,
+        status,
+        priority,
+        dueDate,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: updatedTask,
+    });
+  } catch {
+    res.status(500).json({
+      success: false,
+      message: "Failed to update task",
+    });
+  }
+};
