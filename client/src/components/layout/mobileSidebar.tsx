@@ -27,9 +27,9 @@ const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
         onClick={onClose}
       />
 
-      <aside className="relative z-10 h-full w-72 bg-white p-5 shadow-xl">
+      <aside className="relative z-10 h-full w-72 bg-white dark:bg-gray-900 p-5 shadow-xl">
         <div className="mb-10 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">OpsBoard</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">OpsBoard</h1>
 
           <button
             onClick={onClose}

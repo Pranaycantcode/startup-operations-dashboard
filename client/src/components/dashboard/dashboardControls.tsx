@@ -18,7 +18,7 @@ const DashboardControls = ({
   setSelectedStatus,
 }: DashboardControlsProps) => {
   return (
-    <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm md:flex-row md:items-center md:justify-between">
+    <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm md:flex-row md:items-center md:justify-between">
       <input
         type="text"
         placeholder="Search tasks..."
@@ -31,7 +31,7 @@ const DashboardControls = ({
         <select
           value={selectedPriority}
           onChange={(e) => setSelectedPriority(e.target.value)}
-          className="rounded-xl border border-gray-300 px-4 py-2 text-sm outline-none focus:border-gray-900"
+          className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 outline-none transition focus:border-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-gray-400"
         >
           <option value="All">All Priorities</option>
           <option value="High">High</option>
@@ -42,7 +42,7 @@ const DashboardControls = ({
         <select
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
-          className="rounded-xl border border-gray-300 px-4 py-2 text-sm outline-none focus:border-gray-900"
+          className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 outline-none transition focus:border-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:focus:border-gray-400"
         >
           <option value="All">All Statuses</option>
           <option value="Pending">Pending</option>

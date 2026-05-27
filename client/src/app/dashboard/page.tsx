@@ -118,7 +118,7 @@ export default function Home() {
       />
 
       {isLoading ? (
-        <div className="rounded-2xl bg-white p-6 text-gray-500 shadow-sm">
+        <div className="rounded-2xl bg-white dark:bg-gray-900 p-6 text-gray-500 shadow-sm">
           Loading tasks...
         </div>
       ) : (

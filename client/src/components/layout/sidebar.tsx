@@ -26,8 +26,8 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden min-h-screen w-64 border-r border-gray-200 bg-white p-5 md:block">
-      <h1 className="mb-10 text-2xl font-bold text-gray-900">OpsBoard</h1>
+    <aside className="hidden min-h-screen w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 md:block">
+      <h1 className="mb-10 text-2xl font-bold text-gray-900 dark:text-gray-100">OpsBoard</h1>
 
       <nav className="space-y-2">
         {navItems.map((item) => {

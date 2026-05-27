@@ -10,14 +10,14 @@ interface TaskTableProps {
 
 const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-      <div className="border-b border-gray-200 p-5">
-        <h2 className="text-xl font-semibold text-gray-900">Active Tasks</h2>
+    <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div className="border-b border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-gray-900">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Active Tasks</h2>
       </div>
 
       <table className="w-full border-collapse">
-        <thead className="bg-gray-50">
-          <tr className="border-b text-left text-sm text-gray-500">
+        <thead className="bg-gray-50 dark:bg-gray-800">
+          <tr className="border-b border-gray-200 text-left text-sm text-gray-600 dark:border-gray-700 dark:text-gray-300">
             <th className="px-6 py-3">Task</th>
             <th className="px-6 py-3">Assignee</th>
             <th className="px-6 py-3">Priority</th>
@@ -31,13 +31,13 @@ const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
           {tasks.map((task) => (
             <tr
               key={task.id}
-              className="border-b text-sm transition hover:bg-gray-50"
+              className="border-b border-gray-200 text-sm transition hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800/60"
             >
-              <td className="px-6 py-4 font-medium text-gray-900">
+              <td className="px-6 py-4 font-medium text-gray-900 dark:text-gray-100">
                 {task.title}
               </td>
 
-              <td className="px-6 py-4 text-gray-600">{task.assignee}</td>
+              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{task.assignee}</td>
 
               <td className="px-6 py-4">
                 <PriorityBadge priority={task.priority} />
@@ -50,7 +50,7 @@ const TaskTable = ({ tasks, onUpdateStatus, onDeleteTask }: TaskTableProps) => {
                 />
               </td>
 
-              <td className="px-6 py-4 text-gray-600">{task.dueDate}</td>
+              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">{task.dueDate}</td>
 
               <td className="px-6 py-4">
                 <button

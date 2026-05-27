@@ -36,9 +36,9 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mb-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+      className="mb-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5 shadow-sm"
     >
-      <h2 className="mb-4 text-lg font-semibold text-gray-900">Add New Task</h2>
+      <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Add New Task</h2>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
         <input
