@@ -1,122 +1,163 @@
 import { Request, Response } from "express";
-import { tasks } from "../data/tasks";
-import { Task } from "../types/task";
+import { prisma } from "../config/prisma"; //  Fixed!
 
-export const getTasks = (_req: Request, res: Response) => {
-  res.status(200).json({
-    success: true,
-    data: tasks,
+const validStatuses = ["Pending", "In Progress", "Review", "Completed"];
+const validPriorities = ["Low", "Medium", "High"];
+
+export const getTasks = async (_req: Request, res: Response) => {
+  try {
+    const tasks = await prisma.task.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: tasks,
+    });
+  } catch (error) {
+  console.error("Error fetching tasks:", error); // Helps you debug instantly!
+  res.status(500).json({
+    success: false,
+    message: "Failed to fetch tasks",
   });
+}
 };
 
-export const createTask = (req: Request, res: Response) => {
-  const { title, assignee, status, priority, dueDate } = req.body;
+export const createTask = async (req: Request, res: Response) => {
+  try {
+    const { title, assignee, status, priority, dueDate } = req.body;
 
-  if (!title || !assignee || !status || !priority || !dueDate) {
-    return res.status(400).json({
+    if (!title || !assignee || !status || !priority || !dueDate) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value",
+      });
+    }
+
+    if (!validPriorities.includes(priority)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid priority value",
+      });
+    }
+
+    const isValidDate = !Number.isNaN(Date.parse(dueDate));
+
+    if (!isValidDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid due date",
+      });
+    }
+
+    const task = await prisma.task.create({
+      data: {
+        title,
+        assignee,
+        status,
+        priority,
+        dueDate,
+      },
+    });
+
+    res.status(201).json({
+      success: true,
+      data: task,
+    });
+  } catch (error) {
+    res.status(500).json({
       success: false,
-      message: "All fields are required",
+      message: "Failed to create task",
     });
   }
-
-  const validStatuses = ["Pending", "In Progress", "Review", "Completed"];
-  const validPriorities = ["Low", "Medium", "High"];
-
-  if (!validStatuses.includes(status)) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid status value",
-    });
-  }
-
-  if (!validPriorities.includes(priority)) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid priority value",
-    });
-  }
-
-  const isValidDate = !Number.isNaN(Date.parse(dueDate));
-
-  if (!isValidDate) {
-    return res.status(400).json({
-      success: false,
-      message: "Invalid due date",
-    });
-  }
-
-  const newTask: Task = {
-    id: tasks.length + 1,
-    title,
-    assignee,
-    status,
-    priority,
-    dueDate,
-  };
-
-  tasks.push(newTask);
-
-  res.status(201).json({
-    success: true,
-    data: newTask,
-  });
 };
 
-export const updateTaskStatus = (
-  req: Request,
-  res: Response
-) => {
-  const taskId = Number(req.params.id);
+export const updateTaskStatus = async (req: Request, res: Response) => {
+  try {
+    const taskId = Number(req.params.id);
+    const { status } = req.body;
 
-  const { status } = req.body;
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status value",
+      });
+    }
 
-  const validStatuses = [
-    "Pending",
-    "In Progress",
-    "Review",
-    "Completed",
-  ];
+    const existingTask = await prisma.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
 
-  if (!validStatuses.includes(status)) {
-    return res.status(400).json({
+    if (!existingTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: {
+        id: taskId,
+      },
+      data: {
+        status,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: updatedTask,
+    });
+  } catch {
+    res.status(500).json({
       success: false,
-      message: "Invalid status value",
+      message: "Failed to update task status",
     });
   }
-
-  const task = tasks.find((task) => task.id === taskId);
-
-  if (!task) {
-    return res.status(404).json({
-      success: false,
-      message: "Task not found",
-    });
-  }
-
-  task.status = status;
-
-  res.status(200).json({
-    success: true,
-    data: task,
-  });
 };
 
-export const deleteTask = (req: Request, res: Response) => {
-  const taskId = Number(req.params.id);
+export const deleteTask = async (req: Request, res: Response) => {
+  try {
+    const taskId = Number(req.params.id);
 
-  const taskIndex = tasks.findIndex((task) => task.id === taskId);
+    const existingTask = await prisma.task.findUnique({
+      where: {
+        id: taskId,
+      },
+    });
 
-  if (taskIndex === -1) {
-    return res.status(404).json({
+    if (!existingTask) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    const deletedTask = await prisma.task.delete({
+      where: {
+        id: taskId,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: deletedTask,
+    });
+  } catch {
+    res.status(500).json({
       success: false,
-      message: "Task not found",
+      message: "Failed to delete task",
     });
   }
-
-  const deletedTask = tasks.splice(taskIndex, 1)[0];
-
-  res.status(200).json({
-    success: true,
-    data: deletedTask,
-  });
 };
