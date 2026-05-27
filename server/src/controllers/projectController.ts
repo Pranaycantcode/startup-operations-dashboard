@@ -6,6 +6,9 @@ const validProjectStatuses = ["Planning", "Active", "Completed"];
 export const getProjects = async (_req: Request, res: Response) => {
   try {
     const projects = await prisma.project.findMany({
+      include: {
+        tasks: true,
+      },
       orderBy: {
         createdAt: "desc",
       },

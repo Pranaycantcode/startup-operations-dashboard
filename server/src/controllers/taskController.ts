@@ -17,17 +17,17 @@ export const getTasks = async (_req: Request, res: Response) => {
       data: tasks,
     });
   } catch (error) {
-  console.error("Error fetching tasks:", error); // Helps you debug instantly!
-  res.status(500).json({
-    success: false,
-    message: "Failed to fetch tasks",
-  });
-}
+    console.error("Error fetching tasks:", error); // Helps you debug instantly!
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch tasks",
+    });
+  }
 };
 
 export const createTask = async (req: Request, res: Response) => {
   try {
-    const { title, assignee, status, priority, dueDate } = req.body;
+    const { title, assignee, status, priority, dueDate, projectId } = req.body;
 
     if (!title || !assignee || !status || !priority || !dueDate) {
       return res.status(400).json({
@@ -66,6 +66,7 @@ export const createTask = async (req: Request, res: Response) => {
         status,
         priority,
         dueDate,
+        projectId: projectId ? Number(projectId) : null,
       },
     });
 
@@ -165,7 +166,7 @@ export const deleteTask = async (req: Request, res: Response) => {
 export const updateTask = async (req: Request, res: Response) => {
   try {
     const taskId = Number(req.params.id);
-    const { title, assignee, status, priority, dueDate } = req.body;
+    const { title, assignee, status, priority, dueDate, projectId } = req.body;
 
     if (!title || !assignee || !status || !priority || !dueDate) {
       return res.status(400).json({
@@ -207,6 +208,7 @@ export const updateTask = async (req: Request, res: Response) => {
         status,
         priority,
         dueDate,
+        projectId: projectId ? Number(projectId) : null,
       },
     });
 

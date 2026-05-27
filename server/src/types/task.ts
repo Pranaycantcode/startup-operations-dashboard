@@ -5,4 +5,5 @@ export interface Task {
   status: "Pending" | "In Progress" | "Review" | "Completed";
   priority: "Low" | "Medium" | "High";
   dueDate: string;
+  projectId?: number | null;
 }
