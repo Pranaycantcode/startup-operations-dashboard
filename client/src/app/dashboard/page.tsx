@@ -9,6 +9,8 @@ import DashboardControls from "@/components/dashboard/dashboardControls";
 import AnalyticsSection from "@/components/dashboard/analyticsSection";
 import AddTaskForm from "@/components/dashboard/addTaskForm";
 import EditTaskModal from "@/components/dashboard/editTaskModal";
+import { Project } from "@/types/project";
+import { fetchProjects } from "@/services/projectService";
 import {
   createTask,
   fetchTasks,
@@ -28,21 +30,26 @@ export default function Home() {
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    const loadTasks = async () => {
+    const loadDashboardData = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchTasks();
-        setTasks(data);
+
+        const taskData = await fetchTasks();
+        const projectData = await fetchProjects();
+
+        setTasks(taskData);
+        setProjects(projectData);
       } catch (error) {
-        console.error("Failed to fetch tasks:", error);
+        console.error("Failed to fetch dashboard data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadTasks();
+    loadDashboardData();
   }, []);
 
   const filteredTasks = useMemo(() => {
@@ -125,7 +132,7 @@ export default function Home() {
  */}
       <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
 
-      <AddTaskForm onAddTask={handleAddTask} />
+      <AddTaskForm onAddTask={handleAddTask} projects={projects} />
 
       <DashboardControls
         searchTerm={searchTerm}
@@ -152,6 +159,7 @@ export default function Home() {
       {selectedTask && (
         <EditTaskModal
           task={selectedTask}
+          projects={projects}
           onClose={() => setSelectedTask(null)}
           onUpdateTask={handleUpdateTask}
         />

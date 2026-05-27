@@ -1,6 +1,7 @@
 import { Task } from "@/types/task";
 
 export type CreateTaskInput = Omit<Task, "id">;
+export type UpdateTaskInput = Omit<Task, "id">;
 
 export const fetchTasks = async (): Promise<Task[]> => {
   const response = await fetch("http://localhost:5000/api/tasks");
@@ -72,7 +73,6 @@ export const deleteTask = async (taskId: number): Promise<Task> => {
   return result.data;
 };
 
-export type UpdateTaskInput = Omit<Task, "id">;
 
 export const updateTask = async (
   taskId: number,

@@ -2,18 +2,21 @@
 
 import { useState } from "react";
 import { CreateTaskInput } from "@/services/taskService";
+import { Project } from "@/types/project";
 
 interface AddTaskFormProps {
   onAddTask: (task: CreateTaskInput) => void;
+  projects: Project[];
 }
 
-const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
+const AddTaskForm = ({ onAddTask, projects }: AddTaskFormProps) => {
   const [title, setTitle] = useState("");
   const [assignee, setAssignee] = useState("");
   const [status, setStatus] = useState<CreateTaskInput["status"]>("Pending");
   const [priority, setPriority] =
     useState<CreateTaskInput["priority"]>("Medium");
   const [dueDate, setDueDate] = useState("");
+  const [projectId, setProjectId] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
       status,
       priority,
       dueDate,
+      projectId: projectId ? Number(projectId) : null,
     });
 
     setTitle("");
@@ -31,6 +35,7 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
     setStatus("Pending");
     setPriority("Medium");
     setDueDate("");
+    setProjectId("");
   };
 
   return (
@@ -42,7 +47,7 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
         Add New Task
       </h2>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-6">
         <input
           required
           value={title}
@@ -119,13 +124,37 @@ const AddTaskForm = ({ onAddTask }: AddTaskFormProps) => {
           </option>
         </select>
 
+        <select
+          value={projectId}
+          onChange={(e) => setProjectId(e.target.value)}
+          style={{ colorScheme: "dark" }}
+          className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none focus:border-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
+        >
+          <option
+            value=""
+            className="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100"
+          >
+            No Project
+          </option>
+
+          {projects.map((project) => (
+            <option
+              key={project.id}
+              value={project.id}
+              className="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100"
+            >
+              {project.name}
+            </option>
+          ))}
+        </select>
+
         <input
           required
+          type="date"
           value={dueDate}
           style={{ colorScheme: "dark" }}
           onChange={(e) => setDueDate(e.target.value)}
-          placeholder="Due date"
-          className="rounded-xl border border-gray-300 px-4 py-2 text-sm outline-none focus:border-gray-900"
+          className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm text-gray-900 outline-none focus:border-gray-900 dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
         />
       </div>
 
