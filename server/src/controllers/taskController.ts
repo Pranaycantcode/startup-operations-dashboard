@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma"; //  Fixed!
+import { logActivity } from "../utils/activityLogger";
 
 const validStatuses = ["Pending", "In Progress", "Review", "Completed"];
 const validPriorities = ["Low", "Medium", "High"];
@@ -70,6 +71,13 @@ export const createTask = async (req: Request, res: Response) => {
       },
     });
 
+    await logActivity({
+      type: "TASK_CREATED",
+      message: `Task "${task.title}" was created`,
+      entity: "task",
+      entityId: task.id,
+    });
+
     res.status(201).json({
       success: true,
       data: task,
@@ -116,6 +124,13 @@ export const updateTaskStatus = async (req: Request, res: Response) => {
       },
     });
 
+    await logActivity({
+      type: "TASK_STATUS_UPDATED",
+      message: `Task "${updatedTask.title}" moved to ${updatedTask.status}`,
+      entity: "task",
+      entityId: updatedTask.id,
+    });
+
     res.status(200).json({
       success: true,
       data: updatedTask,
@@ -149,6 +164,13 @@ export const deleteTask = async (req: Request, res: Response) => {
       where: {
         id: taskId,
       },
+    });
+
+    await logActivity({
+      type: "TASK_DELETED",
+      message: `Task "${deletedTask.title}" was deleted`,
+      entity: "task",
+      entityId: deletedTask.id,
     });
 
     res.status(200).json({
@@ -210,6 +232,13 @@ export const updateTask = async (req: Request, res: Response) => {
         dueDate,
         projectId: projectId ? Number(projectId) : null,
       },
+    });
+
+    await logActivity({
+      type: "TASK_UPDATED",
+      message: `Task "${updatedTask.title}" was updated`,
+      entity: "task",
+      entityId: updatedTask.id,
     });
 
     res.status(200).json({

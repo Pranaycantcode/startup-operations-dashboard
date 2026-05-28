@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma";
+import { logActivity } from "../utils/activityLogger";
 
 const validProjectStatuses = ["Planning", "Active", "Completed"];
 
@@ -50,6 +51,13 @@ export const createProject = async (req: Request, res: Response) => {
         description,
         status,
       },
+    });
+
+    await logActivity({
+      type: "PROJECT_CREATED",
+      message: `Project "${project.name}" was created`,
+      entity: "project",
+      entityId: project.id,
     });
 
     res.status(201).json({
