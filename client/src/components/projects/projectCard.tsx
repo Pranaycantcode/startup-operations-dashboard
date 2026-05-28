@@ -1,5 +1,6 @@
 import { Project } from "@/types/project";
 import ProjectStatusBadge from "@/components/ui/projectStatusBadge";
+import Link from "next/link";
 
 interface ProjectCardProps {
   project: Project;
@@ -15,7 +16,10 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-gray-800 dark:bg-gray-900">
+    <Link
+      href={`/projects/${project.id}`}
+      className="block rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-gray-800 dark:bg-gray-900"
+    >
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
@@ -32,9 +36,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
 
       <div className="mt-5">
         <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400">
-            Progress
-          </span>
+          <span className="text-gray-500 dark:text-gray-400">Progress</span>
           <span className="font-medium text-gray-900 dark:text-gray-100">
             {progress}%
           </span>
@@ -55,7 +57,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
       <div className="mt-6 text-xs text-gray-400 dark:text-gray-500">
         Created: {new Date(project.createdAt).toLocaleDateString("en-IN")}
       </div>
-    </div>
+    </Link>
   );
 };
 

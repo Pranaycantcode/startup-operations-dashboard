@@ -63,3 +63,35 @@ export const createProject = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getProjectById = async (req: Request, res: Response) => {
+  try {
+    const projectId = Number(req.params.id);
+
+    const project = await prisma.project.findUnique({
+      where: {
+        id: projectId,
+      },
+      include: {
+        tasks: true,
+      },
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: project,
+    });
+  } catch {
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch project",
+    });
+  }
+};
