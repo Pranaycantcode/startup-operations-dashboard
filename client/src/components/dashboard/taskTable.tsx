@@ -68,7 +68,7 @@ const TaskTable = ({
                     {formatDate(task.dueDate)}
                   </span>
 
-                  <DeadlineBadge dueDate={task.dueDate} />
+                  <DeadlineBadge dueDate={task.dueDate} taskStatus={task.status} />
                 </div>
               </td>
 
