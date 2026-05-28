@@ -11,6 +11,9 @@ import AddTaskForm from "@/components/dashboard/addTaskForm";
 import EditTaskModal from "@/components/dashboard/editTaskModal";
 import { Project } from "@/types/project";
 import { fetchProjects } from "@/services/projectService";
+import { Activity } from "@/types/activity";
+import { fetchActivities } from "@/services/activityService";
+import ActivityTimeline from "@/components/activity/activityTimeline";
 import {
   createTask,
   fetchTasks,
@@ -31,6 +34,7 @@ export default function Home() {
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [activities, setActivities] = useState<Activity[]>([]);
 
   useEffect(() => {
     const loadDashboardData = async () => {
@@ -39,9 +43,11 @@ export default function Home() {
 
         const taskData = await fetchTasks();
         const projectData = await fetchProjects();
+        const activityData = await fetchActivities();
 
         setTasks(taskData);
         setProjects(projectData);
+        setActivities(activityData);
       } catch (error) {
         console.error("Failed to fetch dashboard data:", error);
       } finally {
@@ -68,11 +74,21 @@ export default function Home() {
     });
   }, [tasks, searchTerm, selectedPriority, selectedStatus]);
 
+  const refreshActivities = async () => {
+  try {
+    const activityData = await fetchActivities();
+    setActivities(activityData);
+  } catch (error) {
+    console.error("Failed to refresh activities:", error);
+  }
+};
+
   const handleAddTask = async (taskData: CreateTaskInput) => {
     try {
       const newTask = await createTask(taskData);
 
       setTasks((prevTasks) => [...prevTasks, newTask]);
+      await refreshActivities();
     } catch (error) {
       console.error("Failed to add task:", error);
     }
@@ -85,20 +101,25 @@ export default function Home() {
       setTasks((prevTasks) =>
         prevTasks.map((task) => (task.id === taskId ? updatedTask : task)),
       );
+      await refreshActivities();
     } catch (error) {
       console.error("Failed to update task status:", error);
     }
   };
 
   const handleDeleteTask = async (taskId: number) => {
-    try {
-      await deleteTask(taskId);
+  try {
+    await deleteTask(taskId);
 
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    } catch (error) {
-      console.error("Failed to delete task:", error);
-    }
-  };
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskId)
+    );
+
+    await refreshActivities();
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+  }
+};
 
   const handleUpdateTask = async (
     taskId: number,
@@ -112,11 +133,13 @@ export default function Home() {
       );
 
       setSelectedTask(null);
+      await refreshActivities();
     } catch (error) {
       console.error("Failed to update task:", error);
     }
   };
 
+  
   return (
     <MainLayout>
       {/* <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
@@ -131,6 +154,10 @@ export default function Home() {
       </div>
  */}
       <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
+
+      <div className="mb-8">
+        <ActivityTimeline activities={activities} />
+      </div>
 
       <AddTaskForm onAddTask={handleAddTask} projects={projects} />
 

@@ -22,7 +22,7 @@ const DeadlineBadge = ({ dueDate }: DeadlineBadgeProps) => {
   const status = getDeadlineStatus(dueDate);
   const days = getDaysUntilDeadline(dueDate);
 
-  let label = status;
+  let label: string = status;
 
   if (status === "Upcoming" && days !== null) {
     label = `${days} day${days === 1 ? "" : "s"} left`;
