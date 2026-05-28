@@ -14,6 +14,7 @@ import { fetchProjects } from "@/services/projectService";
 import { Activity } from "@/types/activity";
 import { fetchActivities } from "@/services/activityService";
 import ActivityTimeline from "@/components/activity/activityTimeline";
+import ProtectedRoute from "@/components/auth/protectedRoute";
 import {
   createTask,
   fetchTasks,
@@ -75,13 +76,13 @@ export default function Home() {
   }, [tasks, searchTerm, selectedPriority, selectedStatus]);
 
   const refreshActivities = async () => {
-  try {
-    const activityData = await fetchActivities();
-    setActivities(activityData);
-  } catch (error) {
-    console.error("Failed to refresh activities:", error);
-  }
-};
+    try {
+      const activityData = await fetchActivities();
+      setActivities(activityData);
+    } catch (error) {
+      console.error("Failed to refresh activities:", error);
+    }
+  };
 
   const handleAddTask = async (taskData: CreateTaskInput) => {
     try {
@@ -108,18 +109,16 @@ export default function Home() {
   };
 
   const handleDeleteTask = async (taskId: number) => {
-  try {
-    await deleteTask(taskId);
+    try {
+      await deleteTask(taskId);
 
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== taskId)
-    );
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
 
-    await refreshActivities();
-  } catch (error) {
-    console.error("Failed to delete task:", error);
-  }
-};
+      await refreshActivities();
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+  };
 
   const handleUpdateTask = async (
     taskId: number,
@@ -139,10 +138,10 @@ export default function Home() {
     }
   };
 
-  
   return (
-    <MainLayout>
-      {/* <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
+    <ProtectedRoute>
+      <MainLayout>
+        {/* <div className="mb-8 grid grid-cols-1 gap-5 md:grid-cols-3">
         <StatsCard title="Total Tasks" value={String(tasks.length)} />
         <StatsCard title="Visible Tasks" value={String(filteredTasks.length)} />
         <StatsCard
@@ -153,44 +152,45 @@ export default function Home() {
         />
       </div>
  */}
-      <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
+        <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
 
-      <div className="mb-8">
-        <ActivityTimeline activities={activities} />
-      </div>
-
-      <AddTaskForm onAddTask={handleAddTask} projects={projects} />
-
-      <DashboardControls
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        selectedPriority={selectedPriority}
-        setSelectedPriority={setSelectedPriority}
-        selectedStatus={selectedStatus}
-        setSelectedStatus={setSelectedStatus}
-      />
-
-      {isLoading ? (
-        <div className="rounded-2xl bg-white dark:bg-gray-900 p-6 text-gray-500 shadow-sm">
-          Loading tasks...
+        <div className="mb-8">
+          <ActivityTimeline activities={activities} />
         </div>
-      ) : (
-        <TaskTable
-          tasks={filteredTasks}
-          onUpdateStatus={handleUpdateStatus}
-          onDeleteTask={handleDeleteTask}
-          onEditTask={setSelectedTask}
-        />
-      )}
 
-      {selectedTask && (
-        <EditTaskModal
-          task={selectedTask}
-          projects={projects}
-          onClose={() => setSelectedTask(null)}
-          onUpdateTask={handleUpdateTask}
+        <AddTaskForm onAddTask={handleAddTask} projects={projects} />
+
+        <DashboardControls
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedPriority={selectedPriority}
+          setSelectedPriority={setSelectedPriority}
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
         />
-      )}
-    </MainLayout>
+
+        {isLoading ? (
+          <div className="rounded-2xl bg-white dark:bg-gray-900 p-6 text-gray-500 shadow-sm">
+            Loading tasks...
+          </div>
+        ) : (
+          <TaskTable
+            tasks={filteredTasks}
+            onUpdateStatus={handleUpdateStatus}
+            onDeleteTask={handleDeleteTask}
+            onEditTask={setSelectedTask}
+          />
+        )}
+
+        {selectedTask && (
+          <EditTaskModal
+            task={selectedTask}
+            projects={projects}
+            onClose={() => setSelectedTask(null)}
+            onUpdateTask={handleUpdateTask}
+          />
+        )}
+      </MainLayout>
+    </ProtectedRoute>
   );
 }
