@@ -2,6 +2,7 @@ import { Task } from "@/types/task";
 import PriorityBadge from "@/components/ui/priorityBadge";
 import TaskStatusSelect from "@/components/dashboard/taskStatusSelect";
 import { formatDate } from "@/lib/formatDate";
+import DeadlineBadge from "@/components/ui/deadlineBadge";
 
 interface TaskTableProps {
   tasks: Task[];
@@ -61,8 +62,14 @@ const TaskTable = ({
                 />
               </td>
 
-              <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                {formatDate(task.dueDate)}
+              <td className="px-6 py-4">
+                <div className="flex flex-col gap-2">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {formatDate(task.dueDate)}
+                  </span>
+
+                  <DeadlineBadge dueDate={task.dueDate} />
+                </div>
               </td>
 
               <td className="px-6 py-4">
