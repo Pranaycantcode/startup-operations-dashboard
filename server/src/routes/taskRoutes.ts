@@ -6,13 +6,14 @@ import {
   updateTaskStatus,
   deleteTask,
 } from "../controllers/taskController";
+import { protect } from "../middleware/protect";
 
 const router = Router();
 
-router.get("/", getTasks);
-router.post("/", createTask);
-router.put("/:id", updateTask);
-router.patch("/:id/status", updateTaskStatus);
-router.delete("/:id", deleteTask);
+router.get("/", protect, getTasks);
+router.post("/", protect, createTask);
+router.put("/:id", protect, updateTask);
+router.patch("/:id/status", protect, updateTaskStatus);
+router.delete("/:id", protect, deleteTask);
 
 export default router;
