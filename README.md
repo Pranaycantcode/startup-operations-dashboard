@@ -41,6 +41,11 @@ The goal was to build something that resembles how internal operational tools ar
 
 ⚙️ Backend API: https://startup-operations-dashboard-production.up.railway.app
 
+Demo Credentials:
+
+Email: pranay@test.com
+Password: test1234
+
 ---
 
 # Features
