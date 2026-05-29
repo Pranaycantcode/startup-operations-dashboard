@@ -18,9 +18,7 @@ export const syncProjectStatus = async (projectId?: number | null) => {
   let nextStatus = "Planning";
 
   if (project.tasks.length > 0) {
-    const allTasksCompleted = project.tasks.every(
-      (task) => task.status === "Completed"
-    );
+    const allTasksCompleted = project.tasks.every((task: { status: string }) => task.status === "Completed");
 
     nextStatus = allTasksCompleted ? "Completed" : "Active";
   }
