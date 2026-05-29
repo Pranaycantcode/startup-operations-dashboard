@@ -1,5 +1,14 @@
 # Startup Operations Dashboard
 
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Express](https://img.shields.io/badge/Express.js-Backend-green)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-purple)
+![Railway](https://img.shields.io/badge/Deployed%20on-Railway-blueviolet)
+![Vercel](https://img.shields.io/badge/Frontend-Vercel-black)
+
+
 A full-stack operations management platform built to help teams organize projects, track execution, monitor operational health, and maintain visibility across workflows.
 
 The platform combines project management, task tracking, activity auditing, deadline intelligence, analytics, and role-based access control into a single operational workspace.
