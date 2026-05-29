@@ -1,15 +1,16 @@
 import { Project } from "@/types/project";
+import { API_BASE_URL } from "@/config/api";
 
 export type CreateProjectInput = Pick<
   Project,
   "name" | "description" | "status"
 >;
 
-const API_URL = "http://localhost:5000/api/projects";
+const API_URL = `${API_BASE_URL}/api/projects`;
 
 export const fetchProjects = async (): Promise<Project[]> => {
   const token = localStorage.getItem("authToken");
-  const response = await fetch("http://localhost:5000/api/projects", {
+  const response = await fetch(`${API_BASE_URL}/api/projects`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

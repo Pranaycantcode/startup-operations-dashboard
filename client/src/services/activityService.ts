@@ -1,6 +1,7 @@
 import { Activity } from "@/types/activity";
+import { API_BASE_URL } from "@/config/api";
 
-const API_URL = "http://localhost:5000/api/activities";
+const API_URL = `${API_BASE_URL}/api/activities`;
 
 export const fetchActivities = async (): Promise<Activity[]> => {
   const response = await fetch(API_URL);

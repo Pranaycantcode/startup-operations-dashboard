@@ -1,4 +1,5 @@
 import { Task } from "@/types/task";
+import { API_BASE_URL } from "@/config/api";
 
 export type CreateTaskInput = Omit<Task, "id">;
 export type UpdateTaskInput = Omit<Task, "id">;
@@ -6,7 +7,7 @@ export type UpdateTaskInput = Omit<Task, "id">;
 export const fetchTasks = async (): Promise<Task[]> => {
   const token = localStorage.getItem("authToken");
 
-  const response = await fetch("http://localhost:5000/api/tasks", {
+  const response = await fetch(`${API_BASE_URL}/api/tasks`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -26,7 +27,7 @@ export const createTask = async (
 ): Promise<Task> => {
   const token = localStorage.getItem("authToken");
 
-  const response = await fetch("http://localhost:5000/api/tasks", {
+  const response = await fetch(`${API_BASE_URL}/api/tasks`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +52,7 @@ export const updateTaskStatus = async (
   const token = localStorage.getItem("authToken");
 
   const response = await fetch(
-    `http://localhost:5000/api/tasks/${taskId}/status`,
+    `${API_BASE_URL}/api/tasks/${taskId}/status`,
     {
       method: "PATCH",
       headers: {
@@ -74,7 +75,7 @@ export const updateTaskStatus = async (
 export const deleteTask = async (taskId: number): Promise<Task> => {
   const token = localStorage.getItem("authToken");
 
-  const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -97,7 +98,7 @@ export const updateTask = async (
 ): Promise<Task> => {
   const token = localStorage.getItem("authToken");
 
-  const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+  const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
