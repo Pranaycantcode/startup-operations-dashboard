@@ -46,6 +46,16 @@ Demo Credentials:
 Email: pranay@test.com
 Password: test1234
 
+# Deployment
+
+Frontend deployed on Vercel
+
+Backend deployed on Railway
+
+Database hosted on Railway PostgreSQL
+
+Authentication secured using JWT
+
 ---
 
 # Features
@@ -315,20 +325,29 @@ GET /api/activities
 
 ## Database
 
+* PostgreSQL (Production)
 * Prisma ORM
-* SQLite (Development)
+* Railway PostgreSQL Hosting
+* Prisma Migrations
 
 ## Authentication
 
 * JWT
 * bcrypt
 
-## Development Tools
+## Tooling & Deployment
 
-* Prisma Studio
-* Thunder Client
+### Development
+
 * Git
 * GitHub
+* Prisma Studio
+* Thunder Client
+
+### Deployment
+
+* Vercel (Frontend Hosting)
+* Railway (Backend & PostgreSQL Hosting)
 
 ---
 
@@ -336,20 +355,24 @@ GET /api/activities
 
 ```text
 client/
-├── app/
-├── components/
-├── contexts/
-├── hooks/
-├── services/
-└── types/
+└── src/
+    ├── app/
+    ├── components/
+    ├── contexts/
+    ├── hooks/
+    ├── services/
+    └── types/
 
 server/
-├── controllers/
-├── middleware/
 ├── prisma/
-├── routes/
-├── types/
-└── utils/
+└── src/
+    ├── config/
+    ├── controllers/
+    ├── middleware/
+    ├── routes/
+    ├── types/
+    ├── utils/
+    └── server.ts
 ```
 
 ---
@@ -388,23 +411,23 @@ npm run dev
 
 # Current Highlights
 
-* Full-stack architecture
-* JWT authentication
-* Role-based authorization
-* Activity auditing system
-* Prisma ORM integration
-* Analytics dashboard
-* Deadline intelligence
-* Auto-synced project progress
-* Relational data modeling
-* Modular frontend and backend structure
+* Production-ready full-stack architecture
+* JWT authentication and secure route protection
+* Role-based authorization (RBAC)
+* PostgreSQL database with Prisma ORM
+* Railway backend deployment
+* Vercel frontend deployment
+* Activity auditing and operational history tracking
+* Analytics dashboard and execution insights
+* Deadline intelligence and overdue task detection
+* Auto-synced project progress calculation
+* Relational data modeling (Users, Projects, Tasks, Activities)
+* Modular frontend and backend architecture
 
 ---
 
 # Future Improvements
 
-* Production deployment
-* PostgreSQL migration
 * Team collaboration features
 * Notifications system
 * File attachments
