@@ -43,7 +43,7 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      String   @default("member")
+  role String @default("admin")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

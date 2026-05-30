@@ -5,11 +5,9 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../config/prisma";
 
 const generateToken = (userId: number) => {
-  return jwt.sign(
-    { userId },
-    process.env.JWT_SECRET as string,
-    { expiresIn: "7d" }
-  );
+  return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
+    expiresIn: "7d",
+  });
 };
 
 export const registerUser = async (req: Request, res: Response) => {
@@ -41,6 +39,7 @@ export const registerUser = async (req: Request, res: Response) => {
         name,
         email,
         password: hashedPassword,
+        role: "admin",
       },
       select: {
         id: true,
