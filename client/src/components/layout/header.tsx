@@ -2,6 +2,7 @@
 
 import { Menu } from "lucide-react";
 import ThemeToggle from "@/components/ui/themeToggle";
+import UserMenu from "@/components/auth/userMenu";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
@@ -22,6 +23,8 @@ const Header = ({ onOpenSidebar }: HeaderProps) => {
 
       <div className="flex items-center gap-3">
         <ThemeToggle />
+
+        <UserMenu />
 
         <button
           onClick={onOpenSidebar}
