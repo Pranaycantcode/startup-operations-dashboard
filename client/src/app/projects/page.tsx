@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "@/components/layout/dashboardLayout";
 import ProjectCard from "@/components/projects/projectCard";
 import AddProjectForm from "@/components/projects/addProjectForm";
+import toast from "react-hot-toast";
 
 import { Project } from "@/types/project";
 import {
@@ -25,6 +26,8 @@ export default function ProjectsPage() {
         setProjects(data);
       } catch (error) {
         console.error("Failed to fetch projects:", error);
+
+        toast.error("Failed to load projects");
       } finally {
         setIsLoading(false);
       }
@@ -37,8 +40,10 @@ export default function ProjectsPage() {
     try {
       const newProject = await createProject(projectData);
       setProjects((prevProjects) => [newProject, ...prevProjects]);
+      toast.success("Project created successfully");
     } catch (error) {
       console.error("Failed to create project:", error);
+      toast.error("Failed to create project");
     }
   };
 

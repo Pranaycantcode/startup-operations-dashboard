@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/authContext";
+import toast from "react-hot-toast";
 
 const UserMenu = () => {
   const router = useRouter();
@@ -21,6 +22,9 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     logout();
+
+    toast.success("Logged out successfully");
+
     router.push("/login");
   };
 

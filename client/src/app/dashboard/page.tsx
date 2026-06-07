@@ -15,6 +15,7 @@ import { Activity } from "@/types/activity";
 import { fetchActivities } from "@/services/activityService";
 import ActivityTimeline from "@/components/activity/activityTimeline";
 import ProtectedRoute from "@/components/auth/protectedRoute";
+import toast from "react-hot-toast";
 import {
   createTask,
   fetchTasks,
@@ -90,6 +91,8 @@ export default function Home() {
 
       setTasks((prevTasks) => [...prevTasks, newTask]);
       await refreshActivities();
+
+      toast.success("Task created successfully");
     } catch (error) {
       console.error("Failed to add task:", error);
     }
@@ -103,8 +106,10 @@ export default function Home() {
         prevTasks.map((task) => (task.id === taskId ? updatedTask : task)),
       );
       await refreshActivities();
+      toast.success("Task status updated");
     } catch (error) {
       console.error("Failed to update task status:", error);
+      toast.error("Failed to update task status");
     }
   };
 
@@ -115,8 +120,10 @@ export default function Home() {
       setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
 
       await refreshActivities();
+      toast.success("Task deleted");
     } catch (error) {
       console.error("Failed to delete task:", error);
+      toast.error("Failed to delete task");
     }
   };
 

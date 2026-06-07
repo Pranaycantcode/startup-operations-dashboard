@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { useAuth } from "@/context/authContext";
 
@@ -17,24 +18,27 @@ export default function LoginPage() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      setError("");
-      setIsLoading(true);
+  try {
+    setError("");
+    setIsLoading(true);
 
-      await login({
-        email,
-        password,
-      });
+    await login({
+      email,
+      password,
+    });
 
-      router.push("/dashboard");
-    } catch {
-      setError("Invalid credentials");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    toast.success("Logged in successfully");
+
+    router.push("/dashboard");
+  } catch {
+    setError("Invalid credentials");
+    toast.error("Invalid email or password");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">

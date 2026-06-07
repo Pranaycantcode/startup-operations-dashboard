@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/context/authContext";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -30,9 +31,12 @@ export default function RegisterPage() {
         password,
       });
 
+      toast.success("Account created successfully");
+
       router.push("/dashboard");
     } catch {
       setError("Failed to register");
+      toast.error("Failed to create account");
     } finally {
       setIsLoading(false);
     }
@@ -77,11 +81,7 @@ export default function RegisterPage() {
             className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm dark:border-gray-700 dark:bg-gray-950 dark:text-gray-100"
           />
 
-          {error && (
-            <p className="text-sm text-red-500">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             disabled={isLoading}

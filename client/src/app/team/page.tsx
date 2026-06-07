@@ -10,6 +10,8 @@ import { User } from "@/types/user";
 
 import RoleBadge from "@/components/ui/roleBadge";
 
+import toast from "react-hot-toast";
+
 export default function TeamPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +31,10 @@ export default function TeamPage() {
         setUsers(data);
       } catch (error) {
         console.error("Failed to fetch users", error);
-        setError("Unable to load team data.");
+
+        setError("You do not have permission to view team data.");
+
+        toast.error("You do not have permission to view team data");
       } finally {
         setLoading(false);
       }
