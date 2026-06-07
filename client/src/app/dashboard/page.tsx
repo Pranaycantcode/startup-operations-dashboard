@@ -26,6 +26,7 @@ import {
   UpdateTaskInput,
 } from "@/services/taskService";
 import { Task } from "@/types/task";
+import ActivityFeed from "@/components/dashboard/activityFeed";
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -162,7 +163,10 @@ export default function Home() {
         <AnalyticsSection tasks={tasks} visibleTasks={filteredTasks} />
 
         <div className="mb-8">
-          <ActivityTimeline activities={activities} />
+          <ActivityFeed activities={activities}
+          loading = {isLoading}
+          error = ""
+          />
         </div>
 
         <AddTaskForm onAddTask={handleAddTask} projects={projects} />
